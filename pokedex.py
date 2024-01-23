@@ -119,3 +119,23 @@ def dodaj_grafike_pokemona(pokedex, text_widget):
     pokemon[2] = obraz  
     pokedex[pokedex.index((pokemon[0], pokemon[1], None))] = tuple(pokemon)  
     text_widget.insert(tk.END, f"Grafika dla {nazwa} została dodana!\n")
+    
+def wyswietl_grafike_pokemona(pokedex, text_widget):
+    text_widget.delete(1.0, tk.END)  
+
+    nazwa_pokemona = simpledialog.askstring("Wyświetl Grafikę Pokemona", "Podaj nazwę pokemona, którego grafikę chcesz wyświetlić:")
+    nazwa_pokemona=nazwa_pokemona.capitalize()
+    
+       
+    if not nazwa_pokemona:
+        text_widget.insert(tk.END, "Błąd: Nie podano nazwy pokemona.\n")
+        return
+
+    pokemon = next((p for p in pokedex if p[0] == nazwa_pokemona), None)
+
+    if not pokemon or len(pokemon) < 3 or pokemon[2] is None:
+        text_widget.insert(tk.END, f"{nazwa_pokemona} nie istnieje w Pokedexie lub nie ma przypisanej grafiki.\n")
+        return
+
+    obraz = pokemon[2]  
+    obraz.show()
