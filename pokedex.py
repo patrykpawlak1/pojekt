@@ -139,3 +139,24 @@ def wyswietl_grafike_pokemona(pokedex, text_widget):
 
     obraz = pokemon[2]  
     obraz.show()
+def Pokedex():
+    pokedex = []
+    root = tk.Tk()
+    root.title("Pokedex")
+    text_widget = tk.Text(root, height=10, width=40)
+    text_widget.pack(pady=10)
+    przyciski = {
+        "Wyświetl pokemony": lambda: wyswietl_pokemony(pokedex, text_widget),
+        "Dodaj pokemona": lambda: dodaj_pokemona(pokedex, text_widget),
+        "Wyświetl pokemony wg typu": lambda: wyswietl_pokemony_wg_typu(pokedex, text_widget),
+        "Dodaj grafikę": lambda: dodaj_grafike_pokemona(pokedex, text_widget),
+        "Wyświetl grafikę": lambda: wyswietl_grafike_pokemona(pokedex, text_widget),
+        "Zamknij pokedex": root.destroy
+    }
+
+    for nazwa, funkcja in przyciski.items():
+        przycisk = tk.Button(root, command=funkcja ,text=nazwa)
+        przycisk.pack(pady=5)
+    root.mainloop()
+
+Pokedex()
