@@ -27,7 +27,7 @@ def wyswietl_pokemony_wg_typu(pokedex, text_widget ):
         text_widget.insert(tk.END, "Błąd: Niewłaściwy wybór. Wybierz 1, 2 lub 3.\n")
         return
         if wybor_typu == 1:
-        wybrany_typ = simpledialog.askstring("Wyświetl pokemony wg typu", f"Wybierz typ (dostępne typy: {', '.join(types)}):")
+            wybrany_typ = simpledialog.askstring("Wyświetl pokemony wg typu", f"Wybierz typ (dostępne typy: {', '.join(types)}):")
         if wybrany_typ.capitalize() not in types:
             text_widget.insert(tk.END, f"{wybrany_typ} to nieprawidłowy typ. Wybierz spośród dostępnych.\n")
             return
