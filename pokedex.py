@@ -59,3 +59,63 @@ def wyswietl_pokemony_wg_typu(pokedex, text_widget ):
         for pokemon in pokemony_wg_typu:
             text_widget.insert(tk.END, f"{pokemon[0]} - Typ: {', '.join(pokemon[1])}\n")
 
+def dodaj_pokemona(pokedex, text_widget):
+    text_widget.delete(1.0, tk.END)  
+    
+    nazwa = simpledialog.askstring("Dodaj Pokemona", "Podaj nazwę nowego pokemona:")
+    nazwa=nazwa.capitalize()
+    
+    if not nazwa:
+        text_widget.insert(tk.END, "Błąd: Nie podano nazwy nowego pokemona.\n")
+        return
+    
+    if any(pokemon[0] == nazwa for pokemon in pokedex):
+        text_widget.insert(tk.END, f"{nazwa} już istnieje w Pokedexie. Nie można dodawać powtarzających się Pokémonów.\n")
+        return
+
+    liczba_typow = simpledialog.askinteger("Dodaj Pokemona", "Ile typów ma pokemon? (1 lub 2)")
+    if liczba_typow not in [1, 2]:
+        text_widget.insert(tk.END, "Błąd: Niewłaściwa liczba typów. Podaj 1 lub 2.\n")
+        return
+
+    typy = []
+    for t in range(liczba_typow):
+        wybrany_typ = simpledialog.askstring("Dodaj Pokemona", f"Wybierz typ dla {nazwa} (dostępne typy: {', '.join(types)}):")
+        if wybrany_typ.capitalize() in types:
+            typy.append(wybrany_typ.capitalize())
+        else:
+            text_widget.insert(tk.END, f"{wybrany_typ} to nieprawidłowy typ. Wybierz spośród dostępnych.\n")
+            return
+    
+    nowy_pokemon = (nazwa, typy, None)  
+    pokedex.append(nowy_pokemon)
+    text_widget.insert(tk.END, f"{nazwa} został dodany do Pokedexu!\n")
+
+def dodaj_grafike_pokemona(pokedex, text_widget):
+    text_widget.delete(1.0, tk.END)  
+
+    nazwa = simpledialog.askstring("Dodaj Grafikę Pokemona", "Podaj nazwę pokemona, dla którego chcesz dodać grafikę:")
+    nazwa=nazwa.capitalize()
+    if not nazwa:
+        text_widget.insert(tk.END, "Błąd: Nie podano nazwy pokemona.\n")
+        return
+
+    pokemon = next((p for p in pokedex if p[0] == nazwa), None)
+
+    if not pokemon:
+        text_widget.insert(tk.END, f"{nazwa} nie istnieje w Pokedexie.\n")
+        return
+
+    ścieżka = filedialog.askopenfilename(title="Wybierz Grafikę Pokemona", filetypes=[("Image Files", "*.png;*.jpg;*.jpeg;*.gif")])
+
+    try:
+        obraz = Image.open(ścieżka)
+        obraz.thumbnail((300, 300))  
+    except Exception as x:
+        text_widget.insert(tk.END, f"Błąd: {str(x)}\n")
+        return
+
+    pokemon = list(pokemon)  
+    pokemon[2] = obraz  
+    pokedex[pokedex.index((pokemon[0], pokemon[1], None))] = tuple(pokemon)  
+    text_widget.insert(tk.END, f"Grafika dla {nazwa} została dodana!\n")
